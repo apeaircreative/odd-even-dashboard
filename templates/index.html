@@ -4,7 +4,11 @@
   <title>Odd/Even Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; background: #f2f2f2; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f2f2f2;
+    }
     h1 { color: #333; }
     .chart-container {
       display: flex;
@@ -32,6 +36,35 @@
       font-size: 14px;
       cursor: pointer;
     }
+
+    /* 📜 Feed panel styles */
+    #feed-container {
+      margin: 30px auto; 
+      width: 400px; 
+      background: white; 
+      padding: 10px; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    #feed-container h2 {
+      margin-top: 0;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    #feed {
+      list-style: none;
+      padding-left: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      margin: 0;
+    }
+    #feed li {
+      padding: 4px;
+      border-bottom: 1px solid #eee;
+    }
   </style>
 </head>
 <body>
@@ -48,9 +81,16 @@
     </div>
   </div>
 
+  <!-- 📜 Live feed panel -->
+  <div id="feed-container">
+    <h2>📜 Latest Numbers</h2>
+    <ul id="feed"></ul>
+  </div>
+
   <script>
     const lineCtx = document.getElementById("lineChart").getContext("2d");
     const pieCtx = document.getElementById("pieChart").getContext("2d");
+    const feed = document.getElementById("feed");
 
     const lineChart = new Chart(lineCtx, {
       type: "line",
@@ -118,14 +158,36 @@
         step++;
 
         // Update line chart
+        const MAX_POINTS = 50;
+
+
         lineChart.data.labels.push(step);
         lineChart.data.datasets[0].data.push(data.even || 0);
         lineChart.data.datasets[1].data.push(data.odd || 0);
+
+        if (lineChart.data.labels.length > MAX_POINTS) {
+          lineChart.data.labels.shift();
+          lineChart.data.datasets.data.shift();
+          lineChart.data.datasets[1].data.shift();
+        }
+
         lineChart.update();
 
         // Update pie chart
         pieChart.data.datasets[0].data = [data.even || 0, data.odd || 0];
         pieChart.update();
+
+        // Update feed with latest number
+        if (data.latest) {
+          const li = document.createElement("li");
+          li.textContent = `${data.latest.number} → ${data.latest.type.toUpperCase()}`;
+          li.style.color = data.latest.type === "even" ? "blue" : "red";
+
+          feed.insertBefore(li, feed.firstChild);
+          if (feed.childElementCount > 10) { 
+            feed.removeChild(feed.lastChild);
+          }
+        }
       } catch (error) {
         console.error("Fetch error:", error);
       }
