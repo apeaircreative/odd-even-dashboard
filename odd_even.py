@@ -1,6 +1,6 @@
-def odd_or_even(num): 
-    return "Even" if num % 2 == 0 else "Odd"
+def odd_or_even_list(numbers):
+    for num in numbers:
+        print(f"{num} → {'Even' if num % 2 == 0 else 'Odd'}")
 
 # Example usage
-print(odd_or_even(10))  # Output: Even
-print(odd_or_even(7))   # Output: Odd
+odd_or_even_list([1, 2, 3, 4, 5, 10])
