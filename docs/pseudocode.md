@@ -1,11 +1,14 @@
-FUNCTION OddOrEvenList(numbers):
-    results ← empty list
+FUNCTION SplitOddEven(numbers):
+    evens ← empty list
+    odds ← empty list
+
     FOR each number IN numbers:
         IF (number MOD 2 = 0) THEN
-            ADD (number + " → Even") TO results
+            ADD number TO evens
         ELSE
-            ADD (number + " → Odd") TO results
+            ADD number TO odds
         ENDIF
     END FOR
-    RETURN results
+
+    RETURN (evens, odds)
 END FUNCTION

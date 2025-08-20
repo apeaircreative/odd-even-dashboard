@@ -1,9 +1,15 @@
-def odd_or_even_list(numbers):
-    results = []
+def split_odd_even(numbers):
+    evens = []
+    odds = []
     for num in numbers:
-        results.append(f"{num} → {'Even' if num % 2 == 0 else 'Odd'}")
-    return results
+        if num % 2 == 0:
+            evens.append(num)
+        else:
+            odds.append(num)
+    return evens, odds
 
 # Example usage
 nums = [1, 2, 3, 4, 5, 10]
-print(odd_or_even_list(nums))
+evens, odds = split_odd_even(nums)
+print("Evens:", evens)
+print("Odds:", odds)
