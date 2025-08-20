@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Odd/Even Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>🔴 Odd/Even Streaming Dashboard</h1>
+  <button onclick="startStream()">Start</button>
+  <button onclick="stopStream()">Stop</button>
+  
+  <canvas id="myChart" width="600" height="300"></canvas>
+  
+  <script>
+    const ctx = document.getElementById("myChart").getContext("2d");
+    const chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: [],
+        datasets: [
+          { label: "Evens", data: [], borderColor: "blue", fill: false },
+          { label: "Odds", data: [], borderColor: "red", fill: false }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    let step = 0;
+
+    // Poll Flask API every second
+    setInterval(async () => {
+      const res = await fetch("http://127.0.0.1:5000/data");
+      const data = await res.json();
+      step++;
+      
+      chart.data.labels.push(step);
+      chart.data.datasets[0].data.push(data.even);
+      chart.data.datasets[1].data.push(data.odd);
+      
+      chart.update();
+    }, 1000);
+
+    function startStream() {
+      fetch("/start");
+    }
+    function stopStream() {
+      fetch("/stop");
+    }
+  </script>
+</body>
+</html>
