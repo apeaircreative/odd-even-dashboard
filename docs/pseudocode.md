@@ -1,14 +1,11 @@
-FUNCTION StreamOddEven():
+FUNCTION RandomOddEvenStream():
     LOOP FOREVER:
-        READ number from input
-        IF number IS "quit" THEN
-            EXIT LOOP
-        ENDIF
-
-        IF (number MOD 2 = 0) THEN
-            PRINT number + " → Even"
+        random_number ← generate random integer
+        IF (random_number MOD 2 = 0) THEN
+            PRINT random_number + " → Even"
         ELSE
-            PRINT number + " → Odd"
+            PRINT random_number + " → Odd"
         ENDIF
+        WAIT for a short delay (e.g., 1 second)
     END LOOP
 END FUNCTION
