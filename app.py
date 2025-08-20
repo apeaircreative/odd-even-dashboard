@@ -7,15 +7,17 @@ app = Flask(__name__)
 
 # Global counters + lock
 even_count, odd_count = 0, 0
+latest_number = 0
 streaming = True
 
 def number_stream():
-    global even_count, odd_count, streaming
+    global even_count, odd_count, streaming, latest_number
     while True:
         if streaming:
             num = random.randint(1, 100)
             if num % 2 == 0:
                 even_count += 1
+                latest_number = {"number": num, "type": "even"}
                 try:
                     with open("evens.txt", "a") as f:
                         f.write(str(num) + "\n")
@@ -24,6 +26,7 @@ def number_stream():
                 print(f"{num} → Even")
             else:
                 odd_count += 1
+                latest_number = {"number": num, "type": "odd"}
                 try:
                     with open("odds.txt", "a") as f:
                         f.write(str(num) + "\n")
@@ -39,7 +42,7 @@ def index():
 
 @app.route("/data")
 def get_data():
-    return jsonify({"even": even_count, "odd": odd_count})
+    return jsonify({"even": even_count, "odd": odd_count, "latest": latest_number})
 
 @app.route("/start")
 def start():
