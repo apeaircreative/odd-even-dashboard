@@ -1,11 +1,20 @@
-function autoStreamOddEven() {
-  console.log("Starting automated Odd/Even stream... (Press Ctrl+C to stop)");
+const fs = require("fs");
+
+function logStreamOddEven() {
+  console.log("Streaming numbers... Logging to evens.txt and odds.txt (Press Ctrl+C to stop)");
 
   setInterval(() => {
-    let num = Math.floor(Math.random() * 100) + 1; // 1 to 100
-    console.log(num + " → " + (num % 2 === 0 ? "Even" : "Odd"));
-  }, 1000); // every 1 second
+    let num = Math.floor(Math.random() * 100) + 1;
+
+    if (num % 2 === 0) {
+      fs.appendFileSync("evens.txt", num + "\n");
+      console.log(num + " → Even");
+    } else {
+      fs.appendFileSync("odds.txt", num + "\n");
+      console.log(num + " → Odd");
+    }
+  }, 1000);
 }
 
-// Start the stream
-autoStreamOddEven();
+// Start stream
+logStreamOddEven();
