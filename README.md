@@ -66,6 +66,4 @@ A single odd/even function evolved into a **mini analytics dashboard** with:
 - real-time number streaming  
 - persistent logging  
 - interactive graphs (line, pie, gauge)  
-- live feed ticker in the UI  
-
-This project taught not just coding, but the **workflow of branching, debugging, and integrating across languages and stacks**.  
+- live feed ticker in the UI   
