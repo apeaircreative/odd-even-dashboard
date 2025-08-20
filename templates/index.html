@@ -3,46 +3,132 @@
 <head>
   <title>Odd/Even Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f2f2f2; }
+    h1 { color: #333; }
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+    .chart-box {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #lineChart-container {
+      width: 500px;
+      height: 300px;
+    }
+    #pieChart-container {
+      width: 300px;
+      height: 300px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>🔴 Odd/Even Streaming Dashboard</h1>
   <button onclick="startStream()">Start</button>
   <button onclick="stopStream()">Stop</button>
-  
-  <canvas id="myChart" width="600" height="300"></canvas>
-  
+
+  <div class="chart-container">
+    <div id="lineChart-container" class="chart-box">
+      <canvas id="lineChart"></canvas>
+    </div>
+    <div id="pieChart-container" class="chart-box">
+      <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+
   <script>
-    const ctx = document.getElementById("myChart").getContext("2d");
-    const chart = new Chart(ctx, {
+    const lineCtx = document.getElementById("lineChart").getContext("2d");
+    const pieCtx = document.getElementById("pieChart").getContext("2d");
+
+    const lineChart = new Chart(lineCtx, {
       type: "line",
       data: {
         labels: [],
         datasets: [
-          { label: "Evens", data: [], borderColor: "blue", fill: false },
-          { label: "Odds", data: [], borderColor: "red", fill: false }
-        ]
+          {
+            label: "Evens",
+            data: [],
+            borderColor: "blue",
+            backgroundColor: "rgba(0,0,255,0.2)",
+            fill: true,
+          },
+          {
+            label: "Odds",
+            data: [],
+            borderColor: "red",
+            backgroundColor: "rgba(255,0,0,0.2)",
+            fill: true,
+          },
+        ],
       },
       options: {
         responsive: true,
+        maintainAspectRatio: true,
         scales: {
-          y: { beginAtZero: true }
-        }
-      }
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+
+    const pieChart = new Chart(pieCtx, {
+      type: "doughnut",
+      data: {
+        labels: ["Evens", "Odds"],
+        datasets: [
+          {
+            data: [0, 0],
+            backgroundColor: ["blue", "red"],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
     });
 
     let step = 0;
 
-    // Poll Flask API every second
     setInterval(async () => {
-      const res = await fetch("http://127.0.0.1:5000/data");
-      const data = await res.json();
-      step++;
-      
-      chart.data.labels.push(step);
-      chart.data.datasets[0].data.push(data.even);
-      chart.data.datasets[1].data.push(data.odd);
-      
-      chart.update();
+      try {
+        const res = await fetch("/data");
+        if (!res.ok) throw new Error("Network response not okay");
+        const data = await res.json();
+
+        step++;
+
+        // Update line chart
+        lineChart.data.labels.push(step);
+        lineChart.data.datasets[0].data.push(data.even || 0);
+        lineChart.data.datasets[1].data.push(data.odd || 0);
+        lineChart.update();
+
+        // Update pie chart
+        pieChart.data.datasets[0].data = [data.even || 0, data.odd || 0];
+        pieChart.update();
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
     }, 1000);
 
     function startStream() {

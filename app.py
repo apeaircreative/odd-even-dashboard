@@ -16,13 +16,19 @@ def number_stream():
             num = random.randint(1, 100)
             if num % 2 == 0:
                 even_count += 1
-                with open("evens.txt", "a") as f:
-                    f.write(str(num) + "\n")
+                try:
+                    with open("evens.txt", "a") as f:
+                        f.write(str(num) + "\n")
+                except IOError as e:
+                    print(f"Error writing evens.txt: {e}")
                 print(f"{num} → Even")
             else:
                 odd_count += 1
-                with open("odds.txt", "a") as f:
-                    f.write(str(num) + "\n")
+                try:
+                    with open("odds.txt", "a") as f:
+                        f.write(str(num) + "\n")
+                except IOError as e:
+                    print(f"Error writing odds.txt: {e}")
                 print(f"{num} → Odd")
         time.sleep(1)  # Wait 1s between numbers
 
@@ -51,4 +57,5 @@ def stop():
 threading.Thread(target=number_stream, daemon=True).start()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Run on 0.0.0.0 so accessible externally if needed, port can be set as preferred
+    app.run(debug=True, host="0.0.0.0", port=5000)
