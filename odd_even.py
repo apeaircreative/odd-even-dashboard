@@ -1,15 +1,15 @@
-def split_odd_even(numbers):
-    evens = []
-    odds = []
-    for num in numbers:
-        if num % 2 == 0:
-            evens.append(num)
-        else:
-            odds.append(num)
-    return evens, odds
+def stream_odd_even():
+    print("Enter numbers (type 'quit' to stop):")
+    while True:
+        user_input = input("> ")
+        if user_input.lower() == "quit":
+            print("Stream ended.")
+            break
+        try:
+            num = int(user_input)
+            print(f"{num} → {'Even' if num % 2 == 0 else 'Odd'}")
+        except ValueError:
+            print("Please enter a valid number or 'quit'.")
 
 # Example usage
-nums = [1, 2, 3, 4, 5, 10]
-evens, odds = split_odd_even(nums)
-print("Evens:", evens)
-print("Odds:", odds)
+stream_odd_even()

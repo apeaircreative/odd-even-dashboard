@@ -1,14 +1,14 @@
-FUNCTION SplitOddEven(numbers):
-    evens ← empty list
-    odds ← empty list
-
-    FOR each number IN numbers:
-        IF (number MOD 2 = 0) THEN
-            ADD number TO evens
-        ELSE
-            ADD number TO odds
+FUNCTION StreamOddEven():
+    LOOP FOREVER:
+        READ number from input
+        IF number IS "quit" THEN
+            EXIT LOOP
         ENDIF
-    END FOR
 
-    RETURN (evens, odds)
+        IF (number MOD 2 = 0) THEN
+            PRINT number + " → Even"
+        ELSE
+            PRINT number + " → Odd"
+        ENDIF
+    END LOOP
 END FUNCTION
