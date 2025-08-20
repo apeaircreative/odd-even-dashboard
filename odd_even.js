@@ -1,15 +1,22 @@
-function splitOddEven(numbers) {
-  let evens = [];
-  let odds = [];
-  
-  numbers.forEach(num => {
-    (num % 2 === 0 ? evens : odds).push(num);
-  });
-  
-  return { evens, odds };
-}
+const readline = require("readline");
 
-// Example usage
-const result = splitOddEven([1, 2, 3, 4, 5, 10]);
-console.log("Evens:", result.evens); 
-console.log("Odds:", result.odds);
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+console.log("Enter numbers (type 'quit' to stop):");
+
+rl.on("line", (input) => {
+  if (input.toLowerCase() === "quit") {
+    console.log("Stream ended.");
+    rl.close();
+  } else {
+    let num = Number(input);
+    if (!isNaN(num)) {
+      console.log(num + " → " + (num % 2 === 0 ? "Even" : "Odd"));
+    } else {
+      console.log("Enter a valid number or 'quit'.");
+    }
+  }
+});
