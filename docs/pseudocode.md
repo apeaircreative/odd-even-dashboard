@@ -1,9 +1,11 @@
 FUNCTION OddOrEvenList(numbers):
+    results ← empty list
     FOR each number IN numbers:
         IF (number MOD 2 = 0) THEN
-            PRINT number + " → Even"
+            ADD (number + " → Even") TO results
         ELSE
-            PRINT number + " → Odd"
+            ADD (number + " → Odd") TO results
         ENDIF
     END FOR
+    RETURN results
 END FUNCTION
