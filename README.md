@@ -1,6 +1,6 @@
 # Odd-Even Numbers Dashboard  
 
-> *Started with a simple function → evolved into a real-time web dashboard.*
+> *Write a function to determine if a number is odd or even.*
 
 This project documents my **step-by-step growth** in:  
 - core programming logic  
