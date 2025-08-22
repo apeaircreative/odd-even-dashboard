@@ -45,7 +45,7 @@ Each feature lives on its own branch, showing clear progression: **logic ➝ str
 
 ---
 
-## 🧑‍💻 Skills Gained  
+## 🧑‍💻 Skills  
 
 - **Programming** → functions, lists, grouping, return values  
 - **Debugging** → compile/runtime fixes, backend ↔ frontend issues  
